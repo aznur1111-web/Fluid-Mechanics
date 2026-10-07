@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Aznur Fluid Mechanics Toolbook">
+<title>Aznur Fluid Mechanics Toolbook</title>
+<style>
+:root{
+  --bg:#fafafa;--surface:#fff;--surface2:#f5f5f4;--border:#e7e5e4;
+  --text:#1c1917;--muted:#57534e;--accent:#f59e0b;--accentHover:#d97706;
+  --blue:#2563eb;--green:#059669;--red:#dc2626;--purple:#7c3aed;--cyan:#0891b2;
+  --shadow:0 1px 2px rgba(0,0,0,.05);--radius:10px
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;color:var(--text);line-height:1.48;
+  background-color:var(--bg);
+  background-image:linear-gradient(rgba(28,25,23,.028) 1px,transparent 1px),linear-gradient(90deg,rgba(28,25,23,.028) 1px,transparent 1px);
+  background-size:26px 26px}
+button,input,select{font:inherit}button{cursor:pointer}
+.topbar{position:sticky;top:0;z-index:30;background:rgba(250,250,250,.96);backdrop-filter:blur(7px);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1280px;margin:auto;padding:14px 18px;display:flex;gap:16px;align-items:center}
+.brand{font-weight:800;letter-spacing:-.02em;white-space:nowrap}.brand small{display:block;font-size:.65rem;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.search{flex:1;max-width:520px;margin:auto}.search input{width:100%;padding:9px 12px;border:1px solid var(--border);border-radius:8px;background:#fff;outline:none}.search input:focus{border-color:var(--accent)}
+.top-actions{display:flex;gap:7px}.btn{padding:8px 12px;background:#fff;border:1px solid var(--border);border-radius:8px;color:var(--text);transition:background .15s,border-color .15s}.btn:hover{background:var(--surface2)}.btn.accent{background:var(--accent);border-color:var(--accent);font-weight:700}.btn.accent:hover{background:var(--accentHover);color:#fff}.btn.blue{background:var(--blue);color:#fff;border-color:var(--blue)}.btn.danger{color:var(--red)}
+.layout{max-width:1280px;margin:auto;display:grid;grid-template-columns:250px 1fr;min-height:calc(100vh - 67px)}
+.sidebar{padding:18px 12px;border-right:1px solid var(--border);position:sticky;top:67px;height:calc(100vh - 67px);overflow:auto}
+.sidebar-title{text-transform:uppercase;font-size:.67rem;letter-spacing:.09em;color:#78716c;font-weight:800;padding:7px 9px}
+.sidebtn{width:100%;display:flex;justify-content:space-between;align-items:center;text-align:left;border:1px solid transparent;background:transparent;padding:8px 10px;border-radius:7px;color:var(--text);font-size:.83rem;transition:background .15s}.sidebtn:hover{background:var(--surface2)}.sidebtn.active{background:#ecfeff;border-color:#a5f3fc;color:#164e63}
+.badge{font-size:.66rem;color:var(--muted);background:var(--surface2);padding:2px 6px;border-radius:999px}
+main{padding:28px 22px 70px}.page{display:none}.page.active{display:block;animation:fadein .25s ease}
+@keyframes fadein{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero{margin-bottom:22px}.eyebrow{text-transform:uppercase;letter-spacing:.11em;color:var(--accentHover);font-size:.68rem;font-weight:800;margin-bottom:6px}
+h1{font-size:2.35rem;line-height:1.13;letter-spacing:-.03em}.hero p{max-width:820px;color:var(--muted);margin-top:10px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}.toolbar .left,.toolbar .right{display:flex;gap:7px;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:15px}.span-3{grid-column:span 3}.span-4{grid-column:span 4}.span-5{grid-column:span 5}.span-6{grid-column:span 6}.span-7{grid-column:span 7}.span-8{grid-column:span 8}.span-12{grid-column:span 12}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:17px;box-shadow:var(--shadow)}.card-title{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:13px}.card-title h2{font-size:1rem}.minor{font-size:.73rem;color:var(--muted)}
+.tool-card{transition:.12s transform}.tool-card:hover{transform:translateY(-1px)}.tool-card h3{font-size:.94rem;margin-bottom:4px}.tool-card p{font-size:.79rem;color:var(--muted)}.tool-tag{display:inline-block;margin-top:9px;padding:3px 7px;border:1px solid var(--border);border-radius:999px;font-size:.65rem;color:var(--muted)}
+.form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field label{display:block;font-size:.72rem;font-weight:700;color:var(--muted);margin-bottom:4px}.field input,.field select{width:100%;padding:8px 9px;border:1px solid var(--border);border-radius:7px;background:#fff;color:var(--text);outline:none}.field input:focus,.field select:focus{border-color:var(--accent)}
+.full{grid-column:1/-1}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.eq{margin:10px 0;padding:8px 10px;background:var(--surface2);border-radius:7px;font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.76rem;overflow:auto;white-space:pre-wrap}
+.results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;margin-top:12px}.result{border:1px solid var(--border);border-radius:7px;background:#fcfcfb;padding:8px}.result small{display:block;color:var(--muted);font-size:.67rem}.result strong{display:block;margin-top:2px;font-size:.83rem;word-break:break-word}
+.note{font-size:.76rem;color:#51420e;background:#fffbeb;border-left:3px solid var(--accent);border-radius:4px;padding:9px 10px}.error{font-size:.76rem;color:var(--red);margin-top:8px}
+.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse;font-size:.78rem}.table th,.table td{padding:8px;border-bottom:1px solid var(--border);text-align:left}.table th{background:var(--surface2);white-space:nowrap}.table td:first-child{white-space:nowrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{padding:4px 7px;border:1px solid var(--border);border-radius:999px;font-size:.66rem;color:var(--muted)}
+canvas{display:block;width:100%;height:auto}
+.canvas-box{border:1px solid var(--border);border-radius:8px;overflow:hidden;background:#fff}
+.darkcap{border-color:#1e293b}
+.live{display:flex;align-items:center;gap:10px;margin:9px 0}
+.live label{flex:0 0 120px;font-size:.72rem;font-weight:700;color:var(--muted)}
+.live input[type=range]{flex:1;accent-color:var(--accent)}
+.live output{font-size:.75rem;font-weight:700;min-width:56px;text-align:right;font-variant-numeric:tabular-nums}
+.check{display:flex;gap:7px;align-items:center;font-size:.75rem;margin:7px 0}.check input{width:auto;accent-color:var(--accent)}
+.formula-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.formula{border:1px solid var(--border);padding:10px;border-radius:8px;transition:border-color .15s}.formula:hover{border-color:var(--accent)}.formula h3{font-size:.78rem}.formula code{display:block;margin-top:6px;font-size:.75rem;color:#44403c;white-space:pre-wrap}
+.tool-empty{padding:25px;border:1px dashed var(--border);border-radius:8px;text-align:center;color:var(--muted);background:#fff}
+.footer{margin-top:34px;padding:18px 0;text-align:center;color:var(--muted);font-size:.68rem}
+@media(max-width:1050px){.layout{grid-template-columns:200px 1fr}}
+@media(max-width:800px){.layout{display:block}.sidebar{position:static;height:auto;border-right:0;border-bottom:1px solid var(--border);display:flex;gap:8px;overflow:auto;padding:9px}.sidebar-title{display:none}.sidebtn{white-space:nowrap;width:auto}.sidebtn .badge{display:none}main{padding:20px 12px}.span-3,.span-4,.span-5,.span-6,.span-7,.span-8{grid-column:span 12}}
+@media(max-width:520px){.topbar-inner{flex-wrap:wrap}.search{order:3;flex-basis:100%}.form,.formula-grid{grid-template-columns:1fr}.results{grid-template-columns:1fr}h1{font-size:1.95rem}.live{flex-wrap:wrap}.live label{flex-basis:100%}}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="topbar-inner">
+  <div class="brand">AZNUR <small>Fluid Mechanics</small></div>
+  <div class="search"><input id="search" placeholder="Search tools, equations, concepts..." autocomplete="off"></div>
+  <div class="top-actions"><button class="btn" onclick="exportState()">Export</button><button class="btn" onclick="$('importFile').click()">Import</button><input id="importFile" type="file" accept=".json" hidden onchange="importState(event)"></div>
+</div></div>
+
+<div class="layout">
+<aside class="sidebar">
+  <div style="width:100%">
+    <div class="sidebar-title">Toolbook</div>
+    <button class="sidebtn active" data-page="home">Overview <span class="badge">50+</span></button>
+    <button class="sidebtn" data-page="properties">Fluid properties <span class="badge">7</span></button>
+    <button class="sidebtn" data-page="hydro">Hydrostatics <span class="badge">7</span></button>
+    <button class="sidebtn" data-page="pipe">Pipe flow <span class="badge">12</span></button>
+    <button class="sidebtn" data-page="open">Open channel <span class="badge">6</span></button>
+    <button class="sidebtn" data-page="machines">Fluid machines <span class="badge">5</span></button>
+    <button class="sidebtn" data-page="compressible">Compressible <span class="badge">6</span></button>
+    <button class="sidebtn" data-page="particles">Particle flow <span class="badge">5</span></button>
+    <button class="sidebtn" data-page="visuals">Visual lab <span class="badge">8</span></button>
+    <button class="sidebtn" data-page="reference">Reference <span class="badge">SI</span></button>
+  </div>
+</aside>
+
+<main>
+<section class="page active" id="page-home">
+  <div class="hero"><div class="eyebrow">Aznur Engineering Toolbook</div><h1>Fluid Mechanics</h1><p>Pressure, flow, pipe losses, pumps, open channels, hydrostatics, particle settling, compressible flow, live visualizations and an interactive flow laboratory.</p></div>
+  <div class="toolbar"><div class="left"><span class="chip">50+ tools</span><span class="chip">Darcy + Colebrook</span><span class="chip">Bernoulli</span><span class="chip">Hydrostatics</span><span class="chip">Open-channel flow</span><span class="chip">Compressible flow</span><span class="chip">Live canvas lab</span></div><div class="right"></div></div>
+  <div class="grid" id="catalog"></div><div id="emptySearch" class="tool-empty" style="display:none">No matching tools.</div>
+</section>
+
+<section class="page" id="page-properties">
+  <div class="hero"><div class="eyebrow">Fluid properties</div><h1>Properties and conversions</h1><p>Density, specific weight, specific gravity, dynamic and kinematic viscosity, pressure conversion, volumetric and mass flow.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Density and specific weight</h2></div><div class="form"><div class="field"><label>density ρ kg/m³</label><input id="fp_rho" type="number" value="1000"></div><div class="field"><label>g m/s²</label><input id="fp_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="densityTool()">Calculate</button></div><div id="fp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Specific gravity</h2><span class="minor">relative to water</span></div><div class="form"><div class="field"><label>fluid density kg/m³</label><input id="sg_rho" type="number" value="850"></div><div class="field"><label>reference density kg/m³</label><input id="sg_ref" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="sgTool()">Calculate</button></div><div id="sg_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Viscosity converter</h2><span class="minor">ν = μ/ρ</span></div><div class="form"><div class="field"><label>dynamic μ Pa·s</label><input id="vi_mu" type="number" value=".001"></div><div class="field"><label>density ρ kg/m³</label><input id="vi_rho" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="viscosityTool()">Calculate</button></div><div id="vi_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Pressure conversion</h2><span class="minor">absolute, gauge, head</span></div><div class="form"><div class="field"><label>pressure Pa</label><input id="pc_p" type="number" value="101325"></div><div class="field"><label>fluid density kg/m³</label><input id="pc_rho" type="number" value="1000"></div><div class="field"><label>atmospheric pressure Pa</label><input id="pc_patm" type="number" value="101325"></div></div><div class="actions"><button class="btn accent" onclick="pressureConvert()">Calculate</button></div><div id="pc_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Flow-rate converter</h2><span class="minor">Q = AV = ṁ/ρ</span></div><div class="form"><div class="field"><label>Q m³/s</label><input id="qc_q" type="number" value=".01"></div><div class="field"><label>density kg/m³</label><input id="qc_rho" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="flowConvert()">Calculate</button></div><div id="qc_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Ideal-gas density</h2><span class="minor">ρ = p/(RT)</span></div><div class="form"><div class="field"><label>pressure p Pa</label><input id="ig_p" type="number" value="101325"></div><div class="field"><label>temperature T K</label><input id="ig_T" type="number" value="300"></div><div class="field"><label>specific gas constant R</label><input id="ig_R" type="number" value="287.05"></div></div><div class="actions"><button class="btn accent" onclick="gasDensity()">Calculate</button></div><div id="ig_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-hydro">
+  <div class="hero"><div class="eyebrow">Hydrostatics</div><h1>Pressure and submerged bodies</h1><p>Hydrostatic pressure, manometers, buoyancy, hydrostatic forces, centers of pressure and simple tanks.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Hydrostatic pressure</h2><span class="minor">p = p₀ + ρgh</span></div><div class="form"><div class="field"><label>surface pressure p₀ Pa</label><input id="hp_p0" type="number" value="101325"></div><div class="field"><label>ρ kg/m³</label><input id="hp_rho" type="number" value="1000"></div><div class="field"><label>depth h m</label><input id="hp_h" type="number" value="5"></div><div class="field"><label>g</label><input id="hp_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="hydroPressure()">Calculate</button></div><div id="hp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Two-fluid U-tube manometer</h2><span class="minor">simple column balance</span></div><div class="form"><div class="field"><label>reference pressure p₁ Pa</label><input id="um_p1" type="number" value="101325"></div><div class="field"><label>ρ light kg/m³</label><input id="um_r1" type="number" value="850"></div><div class="field"><label>ρ heavy kg/m³</label><input id="um_r2" type="number" value="13600"></div><div class="field"><label>height difference h m</label><input id="um_h" type="number" value=".1"></div><div class="field"><label>pipe fluid ρ kg/m³</label><input id="um_rf" type="number" value="1000"></div><div class="field"><label>vertical offset z m</label><input id="um_z" type="number" value="0"></div></div><div class="actions"><button class="btn accent" onclick="manometer()">Calculate</button></div><div id="um_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Buoyant force</h2><span class="minor">Archimedes</span></div><div class="form"><div class="field"><label>displaced volume m³</label><input id="bu_V" type="number" value=".02"></div><div class="field"><label>fluid density kg/m³</label><input id="bu_rho" type="number" value="1000"></div><div class="field"><label>object mass kg</label><input id="bu_m" type="number" value="12"></div></div><div class="actions"><button class="btn accent" onclick="buoyancy()">Calculate</button></div><div id="bu_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Hydrostatic force on vertical gate</h2><span class="minor">uniform-width plate</span></div><div class="form"><div class="field"><label>width b m</label><input id="hg_b" type="number" value="2"></div><div class="field"><label>height H m</label><input id="hg_H" type="number" value="3"></div><div class="field"><label>top depth h₀ m</label><input id="hg_h0" type="number" value="1"></div><div class="field"><label>ρ</label><input id="hg_rho" type="number" value="1000"></div><div class="field"><label>g</label><input id="hg_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="gateForce()">Calculate</button></div><div id="hg_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Center of pressure, vertical rectangle</h2></div><div class="form"><div class="field"><label>height H m</label><input id="cp_h" type="number" value="2"></div><div class="field"><label>top depth h₀ m</label><input id="cp_h0" type="number" value="1"></div><div class="field"><label>width b m</label><input id="cp_b" type="number" value="2"></div></div><div class="actions"><button class="btn accent" onclick="centerPressure()">Calculate</button></div><div id="cp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Floating body fraction</h2><span class="minor">Vsub/V = ρbody/ρfluid</span></div><div class="form"><div class="field"><label>object density kg/m³</label><input id="fb_r1" type="number" value="600"></div><div class="field"><label>fluid density kg/m³</label><input id="fb_r2" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="floatFraction()">Calculate</button></div><div id="fb_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Tank fill and empty time</h2><span class="minor">constant Q</span></div><div class="form"><div class="field"><label>tank volume m³</label><input id="tt_V" type="number" value="10"></div><div class="field"><label>initial fraction</label><input id="tt_f1" type="number" value=".1"></div><div class="field"><label>final fraction</label><input id="tt_f2" type="number" value=".9"></div><div class="field"><label>flow Q m³/s</label><input id="tt_Q" type="number" value=".01"></div></div><div class="actions"><button class="btn accent" onclick="tankTime()">Calculate</button></div><div id="tt_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-pipe">
+  <div class="hero"><div class="eyebrow">Internal flow</div><h1>Pipe-flow laboratory</h1><p>Continuity, Bernoulli, Reynolds number, friction factor, major and minor losses, pipe sizing, laminar flow, and common meters.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Continuity equation</h2><span class="minor">Q = AV</span></div><div class="form"><div class="field"><label>diameter D₁ m</label><input id="ct_d1" type="number" value=".1"></div><div class="field"><label>velocity V₁ m/s</label><input id="ct_v1" type="number" value="2"></div><div class="field"><label>diameter D₂ m</label><input id="ct_d2" type="number" value=".05"></div></div><div class="actions"><button class="btn accent" onclick="continuity()">Calculate</button></div><div id="ct_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Bernoulli equation</h2><span class="minor">with pump/loss terms</span></div><div class="form"><div class="field"><label>p₁ Pa</label><input id="be_p1" type="number" value="200000"></div><div class="field"><label>V₁ m/s</label><input id="be_v1" type="number" value="2"></div><div class="field"><label>z₁ m</label><input id="be_z1" type="number" value="0"></div><div class="field"><label>V₂ m/s</label><input id="be_v2" type="number" value="5"></div><div class="field"><label>z₂ m</label><input id="be_z2" type="number" value="4"></div><div class="field"><label>pump head hₚ m</label><input id="be_hp" type="number" value="0"></div><div class="field"><label>loss head hL m</label><input id="be_hl" type="number" value="2"></div><div class="field"><label>ρ kg/m³</label><input id="be_rho" type="number" value="1000"></div><div class="field"><label>g</label><input id="be_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="bernoulli()">Solve for p₂</button></div><div id="be_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Reynolds number</h2><span class="minor">flow regime</span></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="re_rho" type="number" value="1000"></div><div class="field"><label>V m/s</label><input id="re_v" type="number" value="2"></div><div class="field"><label>D m</label><input id="re_d" type="number" value=".05"></div><div class="field"><label>μ Pa s</label><input id="re_mu" type="number" value=".001"></div></div><div class="actions"><button class="btn accent" onclick="reynolds()">Calculate</button></div><div id="re_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Friction factor</h2><span class="minor">laminar or Swamee-Jain</span></div><div class="form"><div class="field"><label>Re</label><input id="ff_re" type="number" value="100000"></div><div class="field"><label>relative roughness ε/D</label><input id="ff_rr" type="number" value=".0002"></div></div><div class="actions"><button class="btn accent" onclick="frictionFactor()">Calculate</button></div><div id="ff_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Darcy-Weisbach head loss</h2><span class="minor">major loss</span></div><div class="form"><div class="field"><label>f Darcy</label><input id="dw_f" type="number" value=".02"></div><div class="field"><label>L m</label><input id="dw_L" type="number" value="100"></div><div class="field"><label>D m</label><input id="dw_D" type="number" value=".1"></div><div class="field"><label>V m/s</label><input id="dw_V" type="number" value="2"></div><div class="field"><label>g</label><input id="dw_g" type="number" value="9.80665"></div><div class="field"><label>ρ kg/m³</label><input id="dw_rho" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="darcy()">Calculate</button></div><div id="dw_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Minor losses</h2><span class="minor">ΣK V²/(2g)</span></div><div class="form"><div class="field full"><label>K total</label><input id="mn_k" type="number" value="2.5"></div><div class="field"><label>V m/s</label><input id="mn_v" type="number" value="3"></div><div class="field"><label>g</label><input id="mn_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="minorLoss()">Calculate</button></div><div id="mn_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Pipe sizing from target velocity</h2><span class="minor">D = √(4Q/πV)</span></div><div class="form"><div class="field"><label>flow Q m³/s</label><input id="ps_Q" type="number" value=".02"></div><div class="field"><label>target V m/s</label><input id="ps_V" type="number" value="2"></div></div><div class="actions"><button class="btn accent" onclick="pipeSize()">Calculate</button></div><div id="ps_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Laminar pipe pressure drop</h2><span class="minor">Hagen-Poiseuille</span></div><div class="form"><div class="field"><label>μ Pa s</label><input id="lp_mu" type="number" value=".001"></div><div class="field"><label>L m</label><input id="lp_L" type="number" value="10"></div><div class="field"><label>Q m³/s</label><input id="lp_Q" type="number" value=".0005"></div><div class="field"><label>D m</label><input id="lp_D" type="number" value=".02"></div></div><div class="actions"><button class="btn accent" onclick="laminarPipe()">Calculate</button></div><div id="lp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Venturi meter</h2><span class="minor">ideal incompressible estimate</span></div><div class="form"><div class="field"><label>D₁ m</label><input id="ve_d1" type="number" value=".1"></div><div class="field"><label>D₂ m</label><input id="ve_d2" type="number" value=".05"></div><div class="field"><label>pressure drop Δp Pa</label><input id="ve_dp" type="number" value="10000"></div><div class="field"><label>ρ kg/m³</label><input id="ve_rho" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="venturi()">Calculate</button></div><div id="ve_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Orifice meter</h2><span class="minor">simplified Cd model</span></div><div class="form"><div class="field"><label>Cd</label><input id="or_cd" type="number" value=".61"></div><div class="field"><label>β = d/D</label><input id="or_beta" type="number" value=".5"></div><div class="field"><label>pipe D m</label><input id="or_D" type="number" value=".1"></div><div class="field"><label>Δp Pa</label><input id="or_dp" type="number" value="10000"></div><div class="field"><label>ρ</label><input id="or_rho" type="number" value="1000"></div></div><div class="actions"><button class="btn accent" onclick="orifice()">Calculate</button></div><div id="or_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Nozzle jet speed</h2><span class="minor">ideal Bernoulli</span></div><div class="form"><div class="field"><label>pressure drop Δp Pa</label><input id="nj_dp" type="number" value="50000"></div><div class="field"><label>ρ kg/m³</label><input id="nj_rho" type="number" value="1000"></div><div class="field"><label>nozzle area A m²</label><input id="nj_A" type="number" value=".002"></div></div><div class="actions"><button class="btn accent" onclick="nozzle()">Calculate</button></div><div id="nj_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Water hammer estimate</h2><span class="minor">rigid-column approximation</span></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="wh_rho" type="number" value="1000"></div><div class="field"><label>wave speed a m/s</label><input id="wh_a" type="number" value="1200"></div><div class="field"><label>velocity change ΔV m/s</label><input id="wh_dv" type="number" value="2"></div></div><div class="actions"><button class="btn accent" onclick="waterHammer()">Calculate</button></div><div id="wh_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-open">
+  <div class="hero"><div class="eyebrow">Open-channel hydraulics</div><h1>Free-surface flow</h1><p>Manning equation, hydraulic radius, Froude number, critical-flow estimates and rectangular weirs.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Manning discharge</h2><span class="minor">Q = (1/n)AR^(2/3)S^(1/2)</span></div><div class="form"><div class="field"><label>width b m</label><input id="ma_b" type="number" value="3"></div><div class="field"><label>depth y m</label><input id="ma_y" type="number" value="1"></div><div class="field"><label>roughness n</label><input id="ma_n" type="number" value=".03"></div><div class="field"><label>slope S</label><input id="ma_s" type="number" value=".001"></div></div><div class="actions"><button class="btn accent" onclick="manning()">Calculate</button></div><div id="ma_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Hydraulic radius</h2><span class="minor">R = A/P</span></div><div class="form"><div class="field"><label>flow area A m²</label><input id="hr_a" type="number" value="3"></div><div class="field"><label>wetted perimeter P m</label><input id="hr_p" type="number" value="5"></div></div><div class="actions"><button class="btn accent" onclick="hydraulicRadius()">Calculate</button></div><div id="hr_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Froude number</h2><span class="minor">Fr = V/√(gD)</span></div><div class="form"><div class="field"><label>V m/s</label><input id="fr_v" type="number" value="2"></div><div class="field"><label>hydraulic depth D m</label><input id="fr_d" type="number" value="1"></div><div class="field"><label>g</label><input id="fr_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="froude()">Calculate</button></div><div id="fr_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Critical depth, rectangular channel</h2><span class="minor">yᶜ = (q²/g)^(1/3)</span></div><div class="form"><div class="field"><label>discharge Q m³/s</label><input id="cd_Q" type="number" value="5"></div><div class="field"><label>width b m</label><input id="cd_b" type="number" value="4"></div><div class="field"><label>g</label><input id="cd_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="criticalDepth()">Calculate</button></div><div id="cd_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Rectangular sharp-crested weir</h2><span class="minor">Q ≈ (2/3)Cd b√(2g)H^(3/2)</span></div><div class="form"><div class="field"><label>Cd</label><input id="sw_cd" type="number" value=".62"></div><div class="field"><label>weir width b m</label><input id="sw_b" type="number" value="2"></div><div class="field"><label>head H m</label><input id="sw_H" type="number" value=".3"></div><div class="field"><label>g</label><input id="sw_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="weir()">Calculate</button></div><div id="sw_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Hydraulic power in a channel</h2><span class="minor">ρgQS</span></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="oc_rho" type="number" value="1000"></div><div class="field"><label>Q m³/s</label><input id="oc_Q" type="number" value="5"></div><div class="field"><label>head/drop H m</label><input id="oc_H" type="number" value="2"></div><div class="field"><label>g</label><input id="oc_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="channelPower()">Calculate</button></div><div id="oc_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-machines">
+  <div class="hero"><div class="eyebrow">Fluid machines</div><h1>Pumps and turbines</h1><p>Pump head, hydraulic power, shaft power, efficiency, and simple system curves.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Pump hydraulic power</h2><span class="minor">P = ρgQH</span></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="pp_rho" type="number" value="1000"></div><div class="field"><label>Q m³/s</label><input id="pp_Q" type="number" value=".03"></div><div class="field"><label>head H m</label><input id="pp_H" type="number" value="25"></div><div class="field"><label>efficiency η</label><input id="pp_eta" type="number" value=".78"></div><div class="field"><label>g</label><input id="pp_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="pumpPower()">Calculate</button></div><div id="pp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Pump head from pressure rise</h2></div><div class="form"><div class="field"><label>Δp Pa</label><input id="ph_dp" type="number" value="250000"></div><div class="field"><label>ρ kg/m³</label><input id="ph_rho" type="number" value="1000"></div><div class="field"><label>velocity head difference m</label><input id="ph_dv" type="number" value="0"></div><div class="field"><label>elevation rise m</label><input id="ph_dz" type="number" value="5"></div><div class="field"><label>g</label><input id="ph_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="pumpHead()">Calculate</button></div><div id="ph_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Turbine power</h2><span class="minor">P = ηρgQH</span></div><div class="form"><div class="field"><label>η</label><input id="tp_eta" type="number" value=".9"></div><div class="field"><label>ρ kg/m³</label><input id="tp_rho" type="number" value="1000"></div><div class="field"><label>Q m³/s</label><input id="tp_Q" type="number" value="10"></div><div class="field"><label>head H m</label><input id="tp_H" type="number" value="30"></div><div class="field"><label>g</label><input id="tp_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="turbinePower()">Calculate</button></div><div id="tp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Simple system curve</h2><span class="minor">static + K V²/(2g)</span></div><div class="form"><div class="field"><label>static head H₀ m</label><input id="sc_h0" type="number" value="10"></div><div class="field"><label>total K</label><input id="sc_K" type="number" value="8"></div><div class="field"><label>pipe area A m²</label><input id="sc_A" type="number" value=".01"></div><div class="field"><label>g</label><input id="sc_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="systemCurve()">Generate curve</button></div><div id="sc_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Pump specific speed</h2><span class="minor">dimensionless-style SI relation</span></div><div class="form"><div class="field"><label>speed N rpm</label><input id="psp_N" type="number" value="1750"></div><div class="field"><label>Q m³/s</label><input id="psp_Q" type="number" value=".05"></div><div class="field"><label>head H m</label><input id="psp_H" type="number" value="30"></div></div><div class="actions"><button class="btn accent" onclick="specificSpeed()">Calculate</button></div><div id="psp_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-compressible">
+  <div class="hero"><div class="eyebrow">Compressible flow</div><h1>Gas dynamics</h1><p>Mach number, speed of sound, stagnation relations, density, temperature and simple isentropic nozzle quantities.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Mach number</h2><span class="minor">M = V/a</span></div><div class="form"><div class="field"><label>velocity V m/s</label><input id="mc_V" type="number" value="340"></div><div class="field"><label>speed of sound a m/s</label><input id="mc_a" type="number" value="343"></div></div><div class="actions"><button class="btn accent" onclick="mach()">Calculate</button></div><div id="mc_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Speed of sound in ideal gas</h2><span class="minor">a = √(γRT)</span></div><div class="form"><div class="field"><label>γ</label><input id="as_g" type="number" value="1.4"></div><div class="field"><label>R J/(kg K)</label><input id="as_R" type="number" value="287.05"></div><div class="field"><label>T K</label><input id="as_T" type="number" value="288.15"></div></div><div class="actions"><button class="btn accent" onclick="soundSpeed()">Calculate</button></div><div id="as_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Stagnation temperature</h2><span class="minor">T₀/T = 1 + (γ−1)M²/2</span></div><div class="form"><div class="field"><label>static T K</label><input id="st_T" type="number" value="300"></div><div class="field"><label>Mach M</label><input id="st_M" type="number" value="2"></div><div class="field"><label>γ</label><input id="st_g" type="number" value="1.4"></div></div><div class="actions"><button class="btn accent" onclick="stagnationT()">Calculate</button></div><div id="st_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Stagnation pressure</h2><span class="minor">isentropic</span></div><div class="form"><div class="field"><label>static p Pa</label><input id="sp_p" type="number" value="101325"></div><div class="field"><label>Mach M</label><input id="sp_M" type="number" value="2"></div><div class="field"><label>γ</label><input id="sp_g" type="number" value="1.4"></div></div><div class="actions"><button class="btn accent" onclick="stagnationP()">Calculate</button></div><div id="sp_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Isentropic area ratio</h2><span class="minor">A/A*</span></div><div class="form"><div class="field"><label>Mach M</label><input id="ia_M" type="number" value="2"></div><div class="field"><label>γ</label><input id="ia_g" type="number" value="1.4"></div></div><div class="actions"><button class="btn accent" onclick="areaMach()">Calculate</button></div><div id="ia_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Choked-flow pressure ratio</h2><span class="minor">critical back pressure</span></div><div class="form"><div class="field"><label>γ</label><input id="ck_g" type="number" value="1.4"></div><div class="field"><label>stagnation pressure p₀ Pa</label><input id="ck_p" type="number" value="500000"></div></div><div class="actions"><button class="btn accent" onclick="chokedPressure()">Calculate</button></div><div id="ck_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-particles">
+  <div class="hero"><div class="eyebrow">Particles and multiphase basics</div><h1>Particle transport</h1><p>Settling, Stokes flow, drag on a sphere, terminal velocity and basic dimensionless checks.</p></div>
+  <div class="grid">
+    <div class="card span-6"><div class="card-title"><h2>Stokes settling velocity</h2><span class="minor">low-Reynolds particle</span></div><div class="form"><div class="field"><label>particle diameter d m</label><input id="ps_d" type="number" value=".0005"></div><div class="field"><label>particle density kg/m³</label><input id="ps_rp" type="number" value="2500"></div><div class="field"><label>fluid density kg/m³</label><input id="ps_rf" type="number" value="1000"></div><div class="field"><label>dynamic μ Pa s</label><input id="ps_mu" type="number" value=".001"></div><div class="field"><label>g</label><input id="ps_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="stokes()">Calculate</button></div><div id="ps_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Sphere drag force</h2><span class="minor">quadratic drag estimate</span></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="sd_rho" type="number" value="1000"></div><div class="field"><label>Cd</label><input id="sd_cd" type="number" value=".47"></div><div class="field"><label>diameter d m</label><input id="sd_d" type="number" value=".01"></div><div class="field"><label>speed V m/s</label><input id="sd_v" type="number" value="5"></div></div><div class="actions"><button class="btn accent" onclick="sphereDrag()">Calculate</button></div><div id="sd_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Terminal velocity iteration</h2><span class="minor">sphere, numerical</span></div><div class="form"><div class="field"><label>mass kg</label><input id="tv_m" type="number" value=".05"></div><div class="field"><label>area m²</label><input id="tv_A" type="number" value=".0002"></div><div class="field"><label>ρ kg/m³</label><input id="tv_rho" type="number" value="1.225"></div><div class="field"><label>Cd</label><input id="tv_cd" type="number" value=".47"></div><div class="field"><label>g</label><input id="tv_g" type="number" value="9.80665"></div></div><div class="actions"><button class="btn accent" onclick="terminalVelocity()">Calculate</button></div><div id="tv_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Particle Reynolds number</h2></div><div class="form"><div class="field"><label>ρ kg/m³</label><input id="pr_rho" type="number" value="1000"></div><div class="field"><label>V m/s</label><input id="pr_v" type="number" value=".02"></div><div class="field"><label>d m</label><input id="pr_d" type="number" value=".001"></div><div class="field"><label>μ Pa s</label><input id="pr_mu" type="number" value=".001"></div></div><div class="actions"><button class="btn accent" onclick="particleRe()">Calculate</button></div><div id="pr_out"></div></div>
+    <div class="card span-6"><div class="card-title"><h2>Settling distance</h2><span class="minor">constant terminal speed</span></div><div class="form"><div class="field"><label>terminal V m/s</label><input id="sdst_v" type="number" value=".01"></div><div class="field"><label>time s</label><input id="sdst_t" type="number" value="60"></div></div><div class="actions"><button class="btn accent" onclick="settlingDistance()">Calculate</button></div><div id="sdst_out"></div></div>
+  </div>
+</section>
+
+<section class="page" id="page-visuals">
+  <div class="hero"><div class="eyebrow">Visual laboratory</div><h1>Interactive flow lab</h1><p>Live simulations and plots: a 2-D potential-flow sandbox, velocity profiles, Bernoulli head bars, Moody-style friction, Manning depth–discharge, hydrostatic pressure, the pump operating point and an animated U-tube manometer. Every slider redraws instantly; canvases render at native device resolution.</p></div>
+  <div class="grid">
+
+    <div class="card span-8"><div class="card-title"><h2>2-D potential-flow sandbox</h2><span class="minor">uniform flow · cylinder · circulation — animated tracers</span></div>
+      <div class="canvas-box darkcap"><canvas id="sandboxCanvas"></canvas></div>
+    </div>
+    <div class="card span-4"><div class="card-title"><h2>Sandbox controls</h2></div>
+      <div class="live"><label>freestream U m/s</label><input type="range" id="sb_u" min="0.2" max="3" step="0.05" value="1.2"><output id="sb_u_o">1.2</output></div>
+      <div class="live"><label>circulation Γ</label><input type="range" id="sb_g" min="-4" max="4" step="0.1" value="0"><output id="sb_g_o">0</output></div>
+      <label class="check"><input type="checkbox" id="sb_cyl" checked> Cylinder in the flow</label>
+      <div class="actions"><button class="btn accent" id="sb_pause">Pause</button><button class="btn" id="sb_reset">Reset particles</button></div>
+      <div id="sb_out"></div>
+      <div class="note" style="margin-top:10px">Ideal inviscid flow — by d'Alembert's paradox the cylinder drag is zero. Adding circulation shifts the stagnation points and mimics Magnus-effect lift.</div>
+    </div>
+
+    <div class="card span-8"><div class="card-title"><h2>Pipe velocity profile</h2><span class="minor">laminar, plug and turbulent-style comparison</span></div>
+      <canvas id="profileCanvas"></canvas>
+    </div>
+    <div class="card span-4"><div class="card-title"><h2>Profile controls</h2></div>
+      <div class="live"><label>Vmax m/s</label><input type="range" id="vp_V" min="0.2" max="6" step="0.1" value="2"><output id="vp_V_o">2</output></div>
+      <div class="field"><label>profile mode</label><select id="vp_mode"><option value="lam">Laminar parabolic</option><option value="plug">Plug / idealized</option><option value="turb">Turbulent-style 1/7 power</option></select></div>
+      <div id="vp_out"></div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>Bernoulli head bars</h2><span class="minor">pressure, velocity and elevation heads</span></div>
+      <div class="live"><label>p/ρg m</label><input type="range" id="bb_p" min="0" max="20" step="0.5" value="10"><output id="bb_p_o">10</output></div>
+      <div class="live"><label>V²/2g m</label><input type="range" id="bb_v" min="0" max="20" step="0.5" value="3"><output id="bb_v_o">3</output></div>
+      <div class="live"><label>z m</label><input type="range" id="bb_z" min="0" max="20" step="0.5" value="4"><output id="bb_z_o">4</output></div>
+      <canvas id="berCanvas"></canvas>
+      <div id="bb_out"></div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>Moody-style friction map</h2><span class="minor">f versus Re for several roughness values</span></div>
+      <canvas id="moodCanvas"></canvas>
+      <div class="note" style="margin-top:10px">Laminar branch uses f = 64/Re; turbulent branches use the Swamee–Jain explicit approximation of Colebrook–White.</div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>Open-channel discharge trend</h2><span class="minor">Manning Q versus depth, rectangular channel</span></div>
+      <div class="live"><label>width b m</label><input type="range" id="mt_b" min="1" max="8" step="0.5" value="3"><output id="mt_b_o">3</output></div>
+      <div class="live"><label>roughness n</label><input type="range" id="mt_n" min="0.012" max="0.05" step="0.002" value="0.03"><output id="mt_n_o">0.03</output></div>
+      <div class="live"><label>slope S</label><input type="range" id="mt_s" min="0.0002" max="0.01" step="0.0002" value="0.001"><output id="mt_s_o">0.001</output></div>
+      <canvas id="manCanvas"></canvas>
+      <div id="mt_out"></div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>Pressure versus depth</h2><span class="minor">hydrostatic line p = ρgh</span></div>
+      <div class="field" style="max-width:280px"><label>fluid</label><select id="ht_fluid"><option value="water" selected>Water · 20 °C — 998 kg/m³</option><option value="sea">Seawater — 1025 kg/m³</option><option value="oil">Oil — 850 kg/m³</option><option value="gly">Glycerin — 1260 kg/m³</option><option value="hg">Mercury — 13600 kg/m³</option></select></div>
+      <canvas id="hydCanvas"></canvas>
+      <div id="ht_out"></div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>Pump versus system curve</h2><span class="minor">operating point solved numerically</span></div>
+      <div class="live"><label>static head H₀ m</label><input type="range" id="px_h0" min="0" max="30" step="0.5" value="10"><output id="px_h0_o">10</output></div>
+      <div class="live"><label>loss factor K</label><input type="range" id="px_k" min="0" max="40" step="1" value="8"><output id="px_k_o">8</output></div>
+      <div class="live"><label>pump shutoff Hs m</label><input type="range" id="px_hs" min="10" max="60" step="1" value="35"><output id="px_hs_o">35</output></div>
+      <div class="live"><label>free delivery m³/s</label><input type="range" id="px_qm" min="0.03" max="0.15" step="0.005" value="0.08"><output id="px_qm_o">0.08</output></div>
+      <canvas id="sysCanvas"></canvas>
+      <div id="px_out"></div>
+    </div>
+
+    <div class="card span-6"><div class="card-title"><h2>U-tube manometer</h2><span class="minor">Δp = (ρ₂ − ρ₁) g Δh</span></div>
+      <div class="live"><label>Δh cm</label><input type="range" id="mm_dh" min="0" max="60" step="1" value="24"><output id="mm_dh_o">24</output></div>
+      <div class="form">
+        <div class="field"><label>heavy fluid ρ₂</label><select id="mm_heavy"><option value="13600" selected>Mercury — 13600</option><option value="1000">Water — 1000</option><option value="850">Oil — 850</option></select></div>
+        <div class="field"><label>light fluid ρ₁</label><select id="mm_light"><option value="1000" selected>Water — 1000</option><option value="850">Oil — 850</option><option value="1.2">Air — 1.2</option></select></div>
+      </div>
+      <canvas id="manometerCanvas"></canvas>
+      <div class="actions"><button class="btn accent" id="mm_btn">Animate</button></div>
+      <div id="mm_out"></div>
+    </div>
+
+  </div>
+</section>
+
+<section class="page" id="page-reference">
+  <div class="hero"><div class="eyebrow">Reference</div><h1>Formula and data book</h1><p>Core fluid mechanics relations, constants, pipe roughness, fluid properties, fitting loss coefficients and quick regime checks.</p></div>
+  <div class="grid">
+    <div class="card span-7"><div class="card-title"><h2>Common equations</h2><span class="minor">14 core relations</span></div><div class="formula-grid">
+      <div class="formula"><h3>Continuity</h3><code>Q = AV
+ṁ = ρQ</code></div>
+      <div class="formula"><h3>Bernoulli (two sections)</h3><code>p₁/ρg + V₁²/2g + z₁ + hp = p₂/ρg + V₂²/2g + z₂ + hL</code></div>
+      <div class="formula"><h3>Reynolds</h3><code>Re = ρVD/μ = VD/ν</code></div>
+      <div class="formula"><h3>Darcy–Weisbach</h3><code>hL = f (L/D) V²/2g</code></div>
+      <div class="formula"><h3>Laminar pipe flow</h3><code>Δp = 128 μ L Q/(πD⁴)
+f = 64/Re</code></div>
+      <div class="formula"><h3>Hydrostatics</h3><code>p = p₀ + ρgh
+F = ρg h̄ A</code></div>
+      <div class="formula"><h3>Buoyancy (Archimedes)</h3><code>F_B = ρ_fluid g V_displaced</code></div>
+      <div class="formula"><h3>Open channel</h3><code>Q = (1/n) A R^(2/3) S^(1/2)
+Fr = V/√(gD)</code></div>
+      <div class="formula"><h3>Rectangular weir</h3><code>Q = (2/3) C_d b √(2g) H^(3/2)</code></div>
+      <div class="formula"><h3>Drag</h3><code>F_D = ½ ρ C_D A V²</code></div>
+      <div class="formula"><h3>Sound speed and Mach</h3><code>a = √(γRT)
+M = V/a</code></div>
+      <div class="formula"><h3>Stagnation (isentropic)</h3><code>T₀/T = 1 + (γ−1)M²/2
+p₀/p = (T₀/T)^(γ/(γ−1))</code></div>
+      <div class="formula"><h3>Hydraulic power</h3><code>P_hyd = ρgQH
+P_shaft = P_hyd/η</code></div>
+      <div class="formula"><h3>Water hammer</h3><code>Δp = ρ a ΔV</code></div>
+    </div></div>
+    <div class="card span-5"><div class="card-title"><h2>Standard constants</h2></div><div class="table-wrap"><table class="table"><tbody>
+      <tr><td>g</td><td>9.80665 m/s²</td></tr>
+      <tr><td>Standard atmosphere</td><td>101.325 kPa</td></tr>
+      <tr><td>ρ water near 20 °C</td><td>998 kg/m³</td></tr>
+      <tr><td>ρ fresh water engineering default</td><td>1000 kg/m³</td></tr>
+      <tr><td>μ water near 20 °C</td><td>1.002 mPa·s</td></tr>
+      <tr><td>ν water near 20 °C</td><td>1.004×10⁻⁶ m²/s</td></tr>
+      <tr><td>ρ air, sea level 15 °C</td><td>1.225 kg/m³</td></tr>
+      <tr><td>μ air near 20 °C</td><td>1.81×10⁻⁵ Pa·s</td></tr>
+      <tr><td>Air gas constant R</td><td>287.05 J/(kg·K)</td></tr>
+      <tr><td>ρ mercury</td><td>13600 kg/m³</td></tr>
+      <tr><td>ρ seawater</td><td>≈ 1025 kg/m³</td></tr>
+    </tbody></table></div></div>
+
+    <div class="card span-6"><div class="card-title"><h2>Typical pipe roughness ε</h2><span class="minor">use ε/D in the friction-factor tool</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Material</th><th>ε (mm)</th></tr></thead><tbody>
+      <tr><td>Drawn tubing, PVC, glass</td><td>0.0015 – 0.007</td></tr>
+      <tr><td>Commercial steel pipe</td><td>0.045</td></tr>
+      <tr><td>Galvanized iron</td><td>0.15</td></tr>
+      <tr><td>Cast iron</td><td>0.26</td></tr>
+      <tr><td>Concrete</td><td>0.3 – 3.0</td></tr>
+      <tr><td>Riveted steel</td><td>0.9 – 9.0</td></tr>
+    </tbody></table></div></div>
+
+    <div class="card span-6"><div class="card-title"><h2>Fluid property snapshot</h2><span class="minor">near 20 °C, 1 atm unless noted</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Fluid</th><th>ρ kg/m³</th><th>μ mPa·s</th><th>ν mm²/s</th></tr></thead><tbody>
+      <tr><td>Water</td><td>998</td><td>1.00</td><td>1.00</td></tr>
+      <tr><td>Seawater</td><td>1025</td><td>1.14</td><td>1.11</td></tr>
+      <tr><td>Air (1 atm)</td><td>1.20</td><td>0.018</td><td>15.1</td></tr>
+      <tr><td>Glycerin</td><td>1260</td><td>1410</td><td>1120</td></tr>
+      <tr><td>Mercury</td><td>13600</td><td>1.55</td><td>0.114</td></tr>
+    </tbody></table></div></div>
+
+    <div class="card span-12"><div class="card-title"><h2>Typical loss coefficients K</h2><span class="minor">standard textbook values; always confirm against your fitting geometry</span></div><div class="table-wrap"><table class="table"><thead><tr><th>Component</th><th>Typical K</th><th>Note</th></tr></thead><tbody>
+      <tr><td>Sharp-edged entrance</td><td>0.5</td><td>Rounded inlets drop to 0.03–0.1</td></tr>
+      <tr><td>Exit to reservoir</td><td>1.0</td><td>Entire velocity head lost</td></tr>
+      <tr><td>90° elbow, threaded</td><td>0.9</td><td>Standard radius</td></tr>
+      <tr><td>90° elbow, flanged long-radius</td><td>0.2 – 0.6</td><td>Geometry dependent</td></tr>
+      <tr><td>Tee, flow through run</td><td>0.4</td><td>Straight through</td></tr>
+      <tr><td>Tee, flow through branch</td><td>1.3 – 1.8</td><td>Branch flow</td></tr>
+      <tr><td>Gate valve, fully open</td><td>0.15 – 0.2</td><td>Rises steeply when throttled</td></tr>
+      <tr><td>Globe valve, fully open</td><td>≈ 10</td><td>High-loss valve</td></tr>
+      <tr><td>Swing check valve</td><td>≈ 2</td><td>Forward flow</td></tr>
+      <tr><td>Sudden expansion</td><td>(1 − A₁/A₂)²</td><td>Borda–Carnot, upstream V basis</td></tr>
+      <tr><td>Sudden contraction</td><td>≈ 0.5 (1 − A₂/A₁)</td><td>Downstream V basis; use Cc for accuracy</td></tr>
+    </tbody></table></div></div>
+
+    <div class="card span-12"><div class="card-title"><h2>Rules of thumb and regime checks</h2></div><div class="table-wrap"><table class="table"><thead><tr><th>Check</th><th>Criterion</th><th>Note</th></tr></thead><tbody>
+      <tr><td>Laminar / turbulent pipe flow</td><td>Re &lt; 2300 laminar · Re &gt; 4000 turbulent</td><td>Transitional between</td></tr>
+      <tr><td>Free-surface regime</td><td>Fr &lt; 1 subcritical · Fr &gt; 1 supercritical</td><td>Fr = 1 is critical flow</td></tr>
+      <tr><td>Compressibility</td><td>M &lt; 0.3 → treat as incompressible</td><td>Density change ≲ 5 %</td></tr>
+      <tr><td>Stokes settling validity</td><td>Re_p &lt; 1</td><td>Otherwise use a drag curve</td></tr>
+      <tr><td>Pump affinity laws</td><td>Q ∝ N · H ∝ N² · P ∝ N³</td><td>Same pump at changed speed</td></tr>
+      <tr><td>Economic pipe velocity</td><td>Liquids 1–3 m/s · low-pressure gas 10–25 m/s</td><td>Balances losses against pipe cost</td></tr>
+    </tbody></table></div></div>
+
+    <div class="card span-12"><div class="card-title"><h2>Engineering scope</h2></div><div class="chips"><span class="chip">Hydrostatics</span><span class="chip">Internal flow</span><span class="chip">External flow</span><span class="chip">Open channels</span><span class="chip">Pump systems</span><span class="chip">Compressible flow</span><span class="chip">Particle settling</span><span class="chip">Meters</span><span class="chip">Visualization</span><span class="chip">2D flow sandbox</span></div></div>
+  </div>
+</section>
+
+<div class="footer">Aznur Fluid Mechanics Toolbook · single HTML file · browser-local calculations · SI units</div>
+</main></div>
+
+<script>
+'use strict';
+const $=id=>document.getElementById(id);
+const v=id=>parseFloat($(id).value);
+const finite=x=>Number.isFinite(x);
+const f=x=>finite(x)?(Math.abs(x)>=1e5||Math.abs(x)<1e-4&&x!==0?x.toExponential(5):x.toFixed(5).replace(/\.?0+$/,'')):'-';
+const G=9.80665, PI=Math.PI;
+function num(id,d){const x=parseFloat($(id).value);return Number.isFinite(x)?x:d}
+function tn(q){const a=Math.abs(q);if(a!==0&&(a>=1e5||a<1e-3))return q.toExponential(1);return String(+q.toFixed(3))}
+function show(id,items,eq=''){ $(id).innerHTML=(eq?`<div class="eq">${eq}</div>`:'')+`<div class="results">${items.map(([a,b])=>`<div class="result"><small>${a}</small><strong>${b}</strong></div>`).join('')}</div>`}
+function go(page){
+  document.querySelectorAll('.sidebtn').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  $('page-'+page).classList.add('active');
+  if(page==='visuals'){drawAll();sbStart()}else{sbStop();mmStop()}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.sidebtn').forEach(b=>b.onclick=()=>go(b.dataset.page));
+
+const cat=[
+['properties','Density and specific weight','ρ, γ'],['properties','Specific gravity','SG'],['properties','Viscosity converter','μ, ν'],['properties','Pressure conversion','Pa, bar, head'],['properties','Flow-rate converter','Q, ṁ'],['properties','Ideal-gas density','p, R, T'],
+['hydro','Hydrostatic pressure','p₀ + ρgh'],['hydro','U-tube manometer','pressure balance'],['hydro','Buoyant force','Archimedes'],['hydro','Hydrostatic gate force','F = ρgh̄A'],['hydro','Center of pressure','vertical plate'],['hydro','Floating fraction','Vsub/V'],['hydro','Tank fill time','Q constant'],
+['pipe','Continuity','Q = AV'],['pipe','Bernoulli','energy equation'],['pipe','Reynolds number','flow regime'],['pipe','Friction factor','Colebrook-style'],['pipe','Darcy-Weisbach','major loss'],['pipe','Minor losses','ΣK'],['pipe','Pipe sizing','target velocity'],['pipe','Laminar pressure drop','Hagen-Poiseuille'],['pipe','Venturi meter','pressure drop'],['pipe','Orifice meter','Cd'],['pipe','Nozzle speed','ideal jet'],['pipe','Water hammer','Δp = ρaΔV'],
+['open','Manning discharge','open channel'],['open','Hydraulic radius','A/P'],['open','Froude number','Fr'],['open','Critical depth','rectangular channel'],['open','Sharp-crested weir','discharge'],['open','Channel hydraulic power','ρgQH'],
+['machines','Pump hydraulic power','ρgQH'],['machines','Pump head','pressure rise'],['machines','Turbine power','ηρgQH'],['machines','System curve','static + loss'],['machines','Pump specific speed','Ns'],
+['compressible','Mach number','M = V/a'],['compressible','Speed of sound','a = √γRT'],['compressible','Stagnation temperature','T₀'],['compressible','Stagnation pressure','p₀'],['compressible','Area-Mach relation','A/A*'],['compressible','Choked pressure','critical ratio'],
+['particles','Stokes settling','low-Re particle'],['particles','Sphere drag','C_D'],['particles','Terminal velocity','numerical'],['particles','Particle Reynolds','Re'],['particles','Settling distance','Vt t'],
+['visuals','2-D flow sandbox','potential flow + cylinder'],['visuals','Velocity profile','laminar / turbulent'],['visuals','Bernoulli head bars','head terms'],['visuals','Moody-style map','friction factor'],['visuals','Manning trend','Q versus depth'],['visuals','Hydrostatic trend','pressure versus depth'],['visuals','Pump vs system curve','operating point'],['visuals','U-tube manometer','animated'],
+['reference','Formula book','14 core relations'],['reference','Roughness and fluid data','tables'],['reference','Fitting coefficients','K values'],['reference','Rules of thumb','regime checks']
+];
+function renderCatalog(q=''){let rows=cat.filter(r=>r.join(' ').toLowerCase().includes(q.toLowerCase()));$('catalog').innerHTML=rows.map(r=>`<div class="card tool-card span-3"><h3>${r[1]}</h3><p>${r[2]}</p><span class="tool-tag">${r[0]}</span></div>`).join('');$('emptySearch').style.display=rows.length?'none':'block'}
+$('search').oninput=e=>renderCatalog(e.target.value);renderCatalog();
+
+/* properties */
+function densityTool(){let rho=v('fp_rho'),g=v('fp_g');show('fp_out',[['specific weight γ',f(rho*g)+' N/m³'],['density',f(rho)+' kg/m³']])}
+function sgTool(){let rho=v('sg_rho'),ref=v('sg_ref');show('sg_out',[['specific gravity',f(rho/ref)],['specific weight ratio',f(rho/ref)]])}
+function viscosityTool(){let mu=v('vi_mu'),rho=v('vi_rho'),nu=mu/rho;show('vi_out',[['kinematic ν',f(nu)+' m²/s'],['kinematic ν',f(nu*1e6)+' cSt'],['dynamic μ',f(mu*1000)+' mPa·s']])}
+function pressureConvert(){let p=v('pc_p'),rho=v('pc_rho'),patm=v('pc_patm');show('pc_out',[['pressure',f(p)+' Pa'],['pressure',f(p/1e5)+' bar'],['gauge pressure',f(p-patm)+' Pa'],['head',f(p/(rho*G))+' m fluid']])}
+function flowConvert(){let Q=v('qc_q'),rho=v('qc_rho');show('qc_out',[['Q',f(Q)+' m³/s'],['Q',f(Q*1000)+' L/s'],['Q',f(Q*3600)+' m³/h'],['mass flow',f(Q*rho)+' kg/s']])}
+function gasDensity(){let p=v('ig_p'),T=v('ig_T'),R=v('ig_R');show('ig_out',[['density',f(p/(R*T))+' kg/m³']])}
+
+/* hydrostatics */
+function hydroPressure(){let p0=v('hp_p0'),rho=v('hp_rho'),h=v('hp_h'),g=v('hp_g');show('hp_out',[['pressure',f(p0+rho*g*h)+' Pa'],['gauge component',f(rho*g*h)+' Pa'],['equivalent head',f(h)+' m']])}
+function manometer(){let p1=v('um_p1'),r1=v('um_r1'),r2=v('um_r2'),h=v('um_h'),rf=v('um_rf'),z=v('um_z');let dp=(r2-r1)*G*h-rf*G*z;show('um_out',[['approx p₂',f(p1+dp)+' Pa'],['pressure difference',f(dp)+' Pa'],['head difference',f(dp/(rf*G))+' m fluid']])}
+function buoyancy(){let V=v('bu_V'),rho=v('bu_rho'),m=v('bu_m'),Fb=rho*G*V,W=m*G;show('bu_out',[['buoyant force',f(Fb)+' N'],['weight',f(W)+' N'],['net upward',f(Fb-W)+' N'],['condition',Fb>W?'rises':'sinks']])}
+function gateForce(){let b=v('hg_b'),H=v('hg_H'),h0=v('hg_h0'),rho=v('hg_rho'),g=v('hg_g'),A=b*H,hbar=h0+H/2,F=rho*g*hbar*A,I=b*H**3/12,ycp=hbar+I/(hbar*A);show('hg_out',[['area',f(A)+' m²'],['resultant force',f(F)+' N'],['centroid depth',f(hbar)+' m'],['center of pressure',f(ycp)+' m']])}
+function centerPressure(){let H=v('cp_h'),h0=v('cp_h0'),b=v('cp_b'),A=b*H,hb=h0+H/2,I=b*H**3/12,y=hb+I/(hb*A);show('cp_out',[['centroid depth',f(hb)+' m'],['center of pressure',f(y)+' m'],['shift below centroid',f(y-hb)+' m']])}
+function floatFraction(){let r1=v('fb_r1'),r2=v('fb_r2'),frac=r1/r2;show('fb_out',[['submerged fraction',f(frac)],['submerged percent',f(frac*100)+' %'],['above-fluid percent',f((1-frac)*100)+' %']])}
+function tankTime(){let V=v('tt_V'),f1=v('tt_f1'),f2=v('tt_f2'),Q=v('tt_Q'),t=(V*(f2-f1))/Math.abs(Q);show('tt_out',[['time',f(t)+' s'],['time',f(t/60)+' min'],['volume moved',f(Math.abs(V*(f2-f1)))+' m³']])}
+
+/* pipe flow */
+function continuity(){let d1=v('ct_d1'),V1=v('ct_v1'),d2=v('ct_d2'),A1=PI*d1*d1/4,A2=PI*d2*d2/4,Q=A1*V1,V2=Q/A2;show('ct_out',[['A₁',f(A1)+' m²'],['Q',f(Q)+' m³/s'],['A₂',f(A2)+' m²'],['V₂',f(V2)+' m/s']])}
+function bernoulli(){let p1=v('be_p1'),V1=v('be_v1'),z1=v('be_z1'),V2=v('be_v2'),z2=v('be_z2'),hp=v('be_hp'),hl=v('be_hl'),rho=v('be_rho'),g=v('be_g'),p2=p1+rho*g*(hp-hl+z1-z2+(V1*V1-V2*V2)/(2*g));show('be_out',[['p₂',f(p2)+' Pa'],['p₂ gauge vs 101325',f(p2-101325)+' Pa'],['velocity head 1',f(V1*V1/(2*g))+' m'],['velocity head 2',f(V2*V2/(2*g))+' m']])}
+function reynolds(){let rho=v('re_rho'),V=v('re_v'),D=v('re_d'),mu=v('re_mu'),Re=rho*V*D/mu;show('re_out',[['Re',f(Re)],['regime',Re<2300?'laminar':Re<4000?'transitional':'turbulent']])}
+function frictionFactor(){let Re=v('ff_re'),rr=v('ff_rr');if(Re<2300){show('ff_out',[['Darcy friction factor',f(64/Re)],['model','laminar']]);return}let z=rr/3.7+5.74/Math.pow(Re,.9),fac=.25/Math.pow(Math.log10(z),2);show('ff_out',[['Darcy friction factor',f(fac)],['model','Swamee-Jain'],['roughness ε/D',f(rr)]])}
+function darcy(){let ff=v('dw_f'),L=v('dw_L'),D=v('dw_D'),V=v('dw_V'),g=v('dw_g'),rho=v('dw_rho'),h=ff*(L/D)*V*V/(2*g);show('dw_out',[['head loss',f(h)+' m'],['pressure loss',f(rho*g*h)+' Pa'],['dynamic head',f(V*V/(2*g))+' m']])}
+function minorLoss(){let K=v('mn_k'),V=v('mn_v'),g=v('mn_g'),h=K*V*V/(2*g);show('mn_out',[['minor head loss',f(h)+' m'],['loss coefficient K',f(K)]])}
+function pipeSize(){let Q=v('ps_Q'),V=v('ps_V'),D=Math.sqrt(4*Q/(PI*V));show('ps_out',[['required diameter',f(D)+' m'],['area',f(Q/V)+' m²'],['velocity check',f(V)+' m/s']])}
+function laminarPipe(){let mu=v('lp_mu'),L=v('lp_L'),Q=v('lp_Q'),D=v('lp_D'),dp=128*mu*L*Q/(PI*Math.pow(D,4)),area=PI*D*D/4,V=Q/area;show('lp_out',[['Δp',f(dp)+' Pa'],['velocity',f(V)+' m/s'],['pressure gradient',f(dp/L)+' Pa/m']])}
+function venturi(){let d1=v('ve_d1'),d2=v('ve_d2'),dp=v('ve_dp'),rho=v('ve_rho'),A1=PI*d1*d1/4,A2=PI*d2*d2/4,beta=d2/d1,Q=A2*Math.sqrt((2*dp/rho)/(1-beta**4));show('ve_out',[['Q ideal',f(Q)+' m³/s'],['V₁',f(Q/A1)+' m/s'],['V₂',f(Q/A2)+' m/s'],['β',f(beta)]])}
+function orifice(){let Cd=v('or_cd'),beta=v('or_beta'),D=v('or_D'),dp=v('or_dp'),rho=v('or_rho'),d=beta*D,A=PI*d*d/4,Q=Cd*A*Math.sqrt(2*dp/(rho*(1-beta**4)));show('or_out',[['Q',f(Q)+' m³/s'],['orifice diameter',f(d)+' m'],['velocity through bore',f(Q/A)+' m/s']])}
+function nozzle(){let dp=v('nj_dp'),rho=v('nj_rho'),A=v('nj_A'),V=Math.sqrt(2*dp/rho),Q=A*V;show('nj_out',[['jet speed',f(V)+' m/s'],['ideal flow rate',f(Q)+' m³/s'],['jet momentum flux',f(rho*Q*V)+' N']])}
+function waterHammer(){let rho=v('wh_rho'),a=v('wh_a'),dv=v('wh_dv'),dp=rho*a*dv;show('wh_out',[['pressure rise',f(dp)+' Pa'],['pressure rise',f(dp/1e6)+' MPa']],'Δp ≈ ρaΔV')}
+
+/* open channel */
+function manning(){let b=v('ma_b'),y=v('ma_y'),n=v('ma_n'),S=v('ma_s'),A=b*y,P=b+2*y,R=A/P,Q=(1/n)*A*Math.pow(R,2/3)*Math.sqrt(S),V=Q/A;show('ma_out',[['area',f(A)+' m²'],['hydraulic radius',f(R)+' m'],['Q',f(Q)+' m³/s'],['mean velocity',f(V)+' m/s']])}
+function hydraulicRadius(){let A=v('hr_a'),P=v('hr_p');show('hr_out',[['hydraulic radius',f(A/P)+' m']],'R = A/P')}
+function froude(){let V=v('fr_v'),D=v('fr_d'),g=v('fr_g'),Fr=V/Math.sqrt(g*D);show('fr_out',[['Froude number',f(Fr)],['flow regime',Fr<1?'subcritical':Fr===1?'critical':'supercritical']])}
+function criticalDepth(){let Q=v('cd_Q'),b=v('cd_b'),g=v('cd_g'),q=Q/b,y=Math.cbrt(q*q/g);show('cd_out',[['critical depth',f(y)+' m'],['critical velocity',f(Q/(b*y))+' m/s']])}
+function weir(){let Cd=v('sw_cd'),b=v('sw_b'),H=v('sw_H'),g=v('sw_g'),Q=(2/3)*Cd*b*Math.sqrt(2*g)*Math.pow(H,1.5);show('sw_out',[['Q',f(Q)+' m³/s'],['head H',f(H)+' m']])}
+function channelPower(){let rho=v('oc_rho'),Q=v('oc_Q'),H=v('oc_H'),g=v('oc_g'),P=rho*g*Q*H;show('oc_out',[['hydraulic power',f(P)+' W'],['hydraulic power',f(P/1000)+' kW']])}
+
+/* machines */
+function pumpPower(){let rho=v('pp_rho'),Q=v('pp_Q'),H=v('pp_H'),eta=v('pp_eta'),g=v('pp_g'),Ph=rho*g*Q*H;show('pp_out',[['hydraulic power',f(Ph)+' W'],['shaft/input power',f(Ph/eta)+' W'],['head',f(H)+' m']])}
+function pumpHead(){let dp=v('ph_dp'),rho=v('ph_rho'),dv=v('ph_dv'),dz=v('ph_dz'),g=v('ph_g');show('ph_out',[['pressure head',f(dp/(rho*g))+' m'],['estimated pump/system head',f(dp/(rho*g)+dv+dz)+' m']])}
+function turbinePower(){let eta=v('tp_eta'),rho=v('tp_rho'),Q=v('tp_Q'),H=v('tp_H'),g=v('tp_g'),P=eta*rho*g*Q*H;show('tp_out',[['shaft power',f(P)+' W'],['shaft power',f(P/1000)+' kW']])}
+function systemCurve(){let H0=v('sc_h0'),K=v('sc_K'),A=v('sc_A'),g=v('sc_g');let vals=[];for(let i=0;i<=8;i++){let Q=i*.02,V=Q/A,H=H0+K*V*V/(2*g);vals.push(`Q=${f(Q)} → H=${f(H)} m`)}$('sc_out').innerHTML='<div class="eq">'+vals.join('\n')+'</div>'}
+function specificSpeed(){let N=v('psp_N'),Q=v('psp_Q'),H=v('psp_H'),Ns=N*Math.sqrt(Q)/Math.pow(H,.75);show('psp_out',[['specific speed Ns',f(Ns)],['N',f(N)+' rpm']])}
+
+/* compressible */
+function mach(){let V=v('mc_V'),a=v('mc_a'),M=V/a;show('mc_out',[['Mach number',f(M)],['regime',M<.3?'low-speed':M<1?'subsonic':M===1?'sonic':M<5?'supersonic':'hypersonic']])}
+function soundSpeed(){let gam=v('as_g'),R=v('as_R'),T=v('as_T'),a=Math.sqrt(gam*R*T);show('as_out',[['speed of sound',f(a)+' m/s']])}
+function stagnationT(){let T=v('st_T'),M=v('st_M'),gam=v('st_g'),T0=T*(1+(gam-1)*M*M/2);show('st_out',[['stagnation temperature',f(T0)+' K'],['temperature rise',f(T0-T)+' K']])}
+function stagnationP(){let p=v('sp_p'),M=v('sp_M'),gam=v('sp_g'),p0=p*Math.pow(1+(gam-1)*M*M/2,gam/(gam-1));show('sp_out',[['stagnation pressure',f(p0)+' Pa'],['pressure ratio p₀/p',f(p0/p)]])}
+function areaMach(){let M=v('ia_M'),gam=v('ia_g'),term=(2/(gam+1))*(1+(gam-1)*M*M/2);let ratio=(1/M)*Math.pow(term,(gam+1)/(2*(gam-1)));show('ia_out',[['A/A*',f(ratio)]])}
+function chokedPressure(){let gam=v('ck_g'),p0=v('ck_p'),ratio=Math.pow(2/(gam+1),gam/(gam-1));show('ck_out',[['critical pressure ratio',f(ratio)],['critical back pressure',f(p0*ratio)+' Pa'],['Mach at throat','1']])}
+
+/* particles */
+function stokes(){let d=v('ps_d'),rp=v('ps_rp'),rf=v('ps_rf'),mu=v('ps_mu'),g=v('ps_g'),V=(rp-rf)*g*d*d/(18*mu),Re=rf*V*d/mu;show('ps_out',[['settling speed',f(V)+' m/s'],['particle Re',f(Re)],['validity check',Re<1?'Stokes range likely valid':'check drag model']])}
+function sphereDrag(){let rho=v('sd_rho'),Cd=v('sd_cd'),d=v('sd_d'),V=v('sd_v'),A=PI*d*d/4,Fd=.5*rho*Cd*A*V*V;show('sd_out',[['area',f(A)+' m²'],['drag force',f(Fd)+' N']])}
+function terminalVelocity(){let m=v('tv_m'),A=v('tv_A'),rho=v('tv_rho'),Cd=v('tv_cd'),g=v('tv_g'),V=Math.sqrt(2*m*g/(rho*Cd*A));show('tv_out',[['terminal speed',f(V)+' m/s'],['terminal drag',f(m*g)+' N']])}
+function particleRe(){let rho=v('pr_rho'),V=v('pr_v'),d=v('pr_d'),mu=v('pr_mu'),Re=rho*V*d/mu;show('pr_out',[['particle Reynolds',f(Re)],['regime',Re<1?'creeping/Stokes':Re<1000?'intermediate':'inertial']])}
+function settlingDistance(){let V=v('sdst_v'),t=v('sdst_t');show('sdst_out',[['distance',f(V*t)+' m'],['distance',f(V*t*1000)+' mm']])}
+
+/* ================= visual laboratory ================= */
+const ASPECT={sandboxCanvas:.467,profileCanvas:.457,berCanvas:.543,moodCanvas:.543,manCanvas:.514,hydCanvas:.514,sysCanvas:.514,manometerCanvas:.429};
+function prep(id){
+  const c=$(id),asp=ASPECT[id]||.55,dpr=Math.min(2,window.devicePixelRatio||1);
+  let w=c.clientWidth;
+  if(w<60)w=c._lw||(id==='sandboxCanvas'||id==='profileCanvas'?920:700);
+  const h=Math.round(w*asp),pw=Math.round(w*dpr),ph=Math.round(h*dpr);
+  if(c.width!==pw||c.height!==ph){c.width=pw;c.height=ph}
+  c._lw=w;c._lh=h;
+  const x=c.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);
+  return x;
+}
+function arrow(g,x1,y1,x2,y2){g.beginPath();g.moveTo(x1,y1);g.lineTo(x2,y2);g.stroke();const a=Math.atan2(y2-y1,x2-x1),s=6;g.beginPath();g.moveTo(x2,y2);g.lineTo(x2-s*Math.cos(a-.45),y2-s*Math.sin(a-.45));g.moveTo(x2,y2);g.lineTo(x2-s*Math.cos(a+.45),y2-s*Math.sin(a+.45));g.stroke()}
+function plot(c,series,xr,yr,xlab,ylab,opts={}){
+  const x=prep(c.id),w=c._lw,h=c._lh;
+  x.clearRect(0,0,w,h);x.fillStyle='#fff';x.fillRect(0,0,w,h);
+  const x0=58,y0=h-40,pw=w-76,ph=h-62;
+  const X=q=>x0+(q-xr[0])/(xr[1]-xr[0])*pw, Y=q=>y0-(q-yr[0])/(yr[1]-yr[0])*ph;
+  x.font='11px -apple-system,Segoe UI,Arial,sans-serif';
+  x.textAlign='center';x.textBaseline='top';
+  for(let i=0;i<=5;i++){const gx=x0+pw*i/5;x.strokeStyle='#efedeb';x.lineWidth=1;x.beginPath();x.moveTo(gx,y0);x.lineTo(gx,y0-ph);x.stroke();x.fillStyle='#78716c';x.fillText(tn(xr[0]+(xr[1]-xr[0])*i/5),gx,y0+6)}
+  x.textAlign='right';x.textBaseline='middle';
+  for(let i=0;i<=4;i++){const gy=y0-ph*i/4;x.strokeStyle='#efedeb';x.beginPath();x.moveTo(x0,gy);x.lineTo(x0+pw,gy);x.stroke();x.fillStyle='#78716c';x.fillText(tn(yr[0]+(yr[1]-yr[0])*i/4),x0-6,gy)}
+  x.strokeStyle='#a8a29e';x.lineWidth=1;x.beginPath();x.moveTo(x0,y0-ph);x.lineTo(x0,y0);x.lineTo(x0+pw,y0);x.stroke();
+  x.fillStyle='#57534e';x.textAlign='right';x.textBaseline='alphabetic';x.fillText(xlab,x0+pw,y0+32);
+  x.save();x.translate(15,y0-ph);x.rotate(-Math.PI/2);x.textAlign='left';x.fillText(ylab,0,-3);x.restore();
+  const colors=['#2563eb','#f59e0b','#059669','#7c3aed'];
+  series.forEach((ss,i)=>{x.beginPath();let pen=false;for(const p of ss){if(!Number.isFinite(p[0])||!Number.isFinite(p[1])){pen=false;continue}const px=X(p[0]),py=Y(p[1]);if(px<x0-2||px>x0+pw+2){pen=false;continue}if(!pen){x.moveTo(px,py);pen=true}else x.lineTo(px,py)}x.strokeStyle=colors[i%4];x.lineWidth=2;x.stroke()});
+  if(opts.points)opts.points.forEach(pt=>{const px=X(pt[0]),py=Y(pt[1]);x.beginPath();x.arc(px,py,5,0,7);x.fillStyle='#dc2626';x.fill();x.lineWidth=2;x.strokeStyle='#fff';x.stroke();x.fillStyle='#b91c1c';x.textAlign='left';x.fillText(pt[2]||'operating point',px+9,py-9)});
+  if(opts.labels){x.textAlign='left';opts.labels.forEach((lab,i)=>{const lx=x0+12+i*130;x.fillStyle=colors[i%4];x.fillRect(lx,10,20,3);x.fillStyle='#57534e';x.fillText(lab,lx+26,14)})}
+}
+
+/* velocity profile */
+function profV(r,mode,V){r=Math.abs(r);if(mode==='lam')return V*(1-r*r);if(mode==='plug')return V;return V*Math.pow(Math.max(0,1-r),1/7)}
+function drawProfile(){
+  const c=$('profileCanvas'),x=prep('profileCanvas'),W=c._lw,H=c._lh;
+  const V=num('vp_V',2),mode=$('vp_mode').value;
+  x.clearRect(0,0,W,H);x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  const x0=84,x1=W-46,top=58,bot=H-64,yc=(top+bot)/2,half=(bot-top)/2;
+  const X=q=>x0+(q/(V*1.12))*(x1-x0), Y=r=>yc-r*half;
+  x.strokeStyle='#f0efed';x.lineWidth=1;
+  for(let i=1;i<=4;i++){const gx=x0+(x1-x0)*i/4;x.beginPath();x.moveTo(gx,top);x.lineTo(gx,bot);x.stroke()}
+  x.strokeStyle='#a8a29e';x.lineWidth=2;
+  x.beginPath();x.moveTo(x0-14,top);x.lineTo(W-30,top);x.moveTo(x0-14,bot);x.lineTo(W-30,bot);x.stroke();
+  x.lineWidth=1;x.strokeStyle='#d6d3d1';
+  for(let hx=x0-6;hx<W-30;hx+=16){x.beginPath();x.moveTo(hx,top);x.lineTo(hx-8,top-9);x.moveTo(hx,bot);x.lineTo(hx-8,bot+9);x.stroke()}
+  x.strokeStyle='#6366f1';x.lineWidth=1.4;
+  [-.88,-.66,-.44,-.22,0,.22,.44,.66,.88].forEach(r=>{const vv=profV(r,mode,V);if(vv>0.03*V)arrow(x,x0,Y(r),X(vv),Y(r))});
+  x.beginPath();x.moveTo(X(0),Y(-1));
+  for(let r=-1;r<=1.0001;r+=.02)x.lineTo(X(profV(r,mode,V)),Y(r));
+  x.lineTo(X(0),Y(1));x.closePath();x.fillStyle='rgba(245,158,11,.14)';x.fill();
+  x.beginPath();
+  for(let r=-1;r<=1.0001;r+=.02){const px=X(profV(r,mode,V)),py=Y(r);r<=-1?x.moveTo(px,py):x.lineTo(px,py)}
+  x.strokeStyle='#d97706';x.lineWidth=2.5;x.stroke();
+  x.setLineDash([4,4]);x.strokeStyle='#d6d3d1';x.lineWidth=1;x.beginPath();x.moveTo(x0-14,yc);x.lineTo(W-30,yc);x.stroke();
+  const ratio=mode==='lam'?0.5:mode==='plug'?1:49/60,Vavg=V*ratio,xa=X(Vavg);
+  x.strokeStyle='#2563eb';x.setLineDash([6,4]);x.beginPath();x.moveTo(xa,top-6);x.lineTo(xa,bot+6);x.stroke();x.setLineDash([]);
+  x.fillStyle='#2563eb';x.font='11px -apple-system,Segoe UI,Arial,sans-serif';x.textAlign='left';x.fillText('mean V = '+tn(Vavg)+' m/s',xa+6,top-10);
+  x.fillStyle='#57534e';x.textAlign='center';
+  x.fillText('velocity V (m/s)',(x0+x1)/2,H-16);
+  for(let i=0;i<=4;i++)x.fillText(tn(V*1.12*i/4),x0+(x1-x0)*i/4,bot+20);
+  x.save();x.translate(26,yc);x.rotate(-Math.PI/2);x.fillText('radius r/R',0,-8);x.restore();
+  x.textAlign='right';x.fillText('+1',x0-20,top+4);x.fillText('0',x0-20,yc+4);x.fillText('−1',x0-20,bot+4);
+  show('vp_out',[['centerline Vmax',f(V)+' m/s'],['mean velocity',f(Vavg)+' m/s'],['mean / max ratio',f(ratio)],['model',mode==='lam'?'parabolic (laminar)':mode==='plug'?'plug (idealized)':'1/7 power (turbulent-style)']]);
+}
+
+/* Bernoulli bars */
+function drawBernoulliBars(){
+  const c=$('berCanvas'),x=prep('berCanvas'),W=c._lw,H=c._lh;
+  const hp=num('bb_p',10),hv=num('bb_v',3),hz=num('bb_z',4),tot=hp+hv+hz;
+  const mx=Math.max(tot*1.2,5),base=H-46,maxH=H-112;
+  x.clearRect(0,0,W,H);x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  x.font='10px -apple-system,Segoe UI,Arial,sans-serif';
+  for(let m=5;m<=mx;m+=5){const gy=base-m/mx*maxH;x.strokeStyle='#efedeb';x.lineWidth=1;x.beginPath();x.moveTo(48,gy);x.lineTo(W-20,gy);x.stroke();x.fillStyle='#a8a29e';x.textAlign='right';x.fillText(m+' m',44,gy+3)}
+  x.strokeStyle='#a8a29e';x.lineWidth=1;x.beginPath();x.moveTo(48,base);x.lineTo(W-20,base);x.stroke();
+  const bars=[['p/ρg',hp,'#2563eb'],['V²/2g',hv,'#f59e0b'],['z',hz,'#059669']];
+  const bw=Math.min(78,W*.16);
+  x.font='11px -apple-system,Segoe UI,Arial,sans-serif';x.textAlign='center';
+  bars.forEach((q,i)=>{const cx=W*(.14+.24*i),bh=Math.max(1,q[1]/mx*maxH);
+    x.fillStyle=q[2];x.fillRect(cx-bw/2,base-bh,bw,bh);
+    x.fillStyle='#57534e';x.fillText(tn(q[1])+' m',cx,base-bh-8);
+    x.fillStyle='#1c1917';x.fillText(q[0],cx,base+18)});
+  const cx=W*.86;let yy=base;
+  bars.forEach(s=>{const bh=Math.max(0,s[1]/mx*maxH);x.fillStyle=s[2];x.fillRect(cx-bw/2,yy-bh,bw,bh);yy-=bh});
+  x.fillStyle='#57534e';x.fillText(tn(tot)+' m',cx,base-tot/mx*maxH-8);
+  x.fillStyle='#1c1917';x.fillText('total (stacked)',cx,base+18);
+  const ty=base-tot/mx*maxH;
+  x.setLineDash([6,4]);x.strokeStyle='#dc2626';x.beginPath();x.moveTo(48,ty);x.lineTo(W-20,ty);x.stroke();x.setLineDash([]);
+  x.fillStyle='#dc2626';x.textAlign='right';x.fillText('total head H = '+tn(tot)+' m',W-26,ty-8);
+  show('bb_out',[['pressure head',f(hp)+' m'],['velocity head',f(hv)+' m'],['elevation head',f(hz)+' m'],['total head',f(tot)+' m'],['piezometric head p/ρg + z',f(hp+hz)+' m']]);
+}
+
+/* Moody */
+function swamee(Re,rr){if(Re<2300)return 64/Re;return .25/Math.pow(Math.log10(rr/3.7+5.74/Math.pow(Re,.9)),2)}
+function drawMoody(){const series=[];[0,.0001,.001,.01].forEach(rr=>{const a=[];for(let z=Math.log10(2300);z<=7;z+=.025){const Re=Math.pow(10,z);a.push([z,swamee(Re,rr)])}series.push(a)});
+  plot($('moodCanvas'),series,[Math.log10(2300),7],[.005,.06],'log₁₀(Re)','Darcy f',{labels:['ε/D = 0','10⁻⁴','10⁻³','10⁻²']})}
+
+/* Manning trend */
+function mannQ(b,y,n,S){const A=b*y,P=b+2*y,R=A/P;return (1/n)*A*Math.pow(R,2/3)*Math.sqrt(S)}
+function drawManningTrend(){
+  const b=num('mt_b',3),n=num('mt_n',.03),S=num('mt_s',.001);
+  const pts=[];for(let y=.05;y<=3;y+=.03)pts.push([y,mannQ(b,y,n,S)]);
+  const Qmax=pts[pts.length-1][1];
+  plot($('manCanvas'),[pts],[0,3],[0,Qmax*1.06],'depth y (m)','Q (m³/s)');
+  show('mt_out',[['Q at y = 1 m',f(mannQ(b,1,n,S))+' m³/s'],['Q at y = 3 m',f(Qmax)+' m³/s'],['roughness n',f(n)],['bed slope S',f(S)]]);
+}
+
+/* hydrostatic trend */
+const FLUIDS={water:['Water · 20 °C',998],sea:['Seawater',1025],oil:['Oil',850],gly:['Glycerin',1260],hg:['Mercury',13600]};
+function drawHydroTrend(){
+  const [name,rho]=FLUIDS[$('ht_fluid').value];
+  const pts=[];for(let h=0;h<=10;h+=.1)pts.push([h,rho*G*h/1000]);
+  plot($('hydCanvas'),[pts],[0,10],[0,rho*G*10/1000*1.05],'depth h (m)','gauge pressure (kPa)');
+  show('ht_out',[['fluid',name],['density ρ',f(rho)+' kg/m³'],['p at 5 m depth',f(rho*G*5/1000)+' kPa'],['p at 10 m depth',f(rho*G*10/1000)+' kPa']]);
+}
+
+/* pump vs system */
+function drawPumpSystem(){
+  const H0=num('px_h0',10),K=num('px_k',8),Hs=num('px_hs',35),Qm=num('px_qm',.08),A=.01;
+  const sys=Q=>H0+K*Math.pow(Q/A,2)/(2*G), pump=Q=>Hs*(1-(Q/Qm)*(Q/Qm));
+  const Qend=Qm*1.15,s1=[],s2=[];
+  for(let i=0;i<=160;i++){const Q=Qend*i/160;s1.push([Q,sys(Q)]);if(Q<=Qm)s2.push([Q,pump(Q)])}
+  let Qop=null,prev=pump(0)-sys(0);
+  for(let i=1;i<=400;i++){const Q=Qm*i/400,d=pump(Q)-sys(Q);
+    if(prev>=0&&d<0){let lo=Qm*(i-1)/400,hi=Q;for(let k=0;k<40;k++){const m=(lo+hi)/2;(pump(m)-sys(m))>=0?lo=m:hi=m}Qop=(lo+hi)/2;break}
+    prev=d}
+  plot($('sysCanvas'),[s2,s1],[0,Qend],[0,Math.max(sys(Qm),Hs)*1.15],'Q (m³/s)','head (m)',{labels:['pump curve','system curve'],points:Qop?[[Qop,sys(Qop),'operating point']]:[]});
+  if(Qop)show('px_out',[['operating flow Q*',f(Qop)+' m³/s'],['operating head H*',f(sys(Qop))+' m'],['pipe velocity (A = 0.01 m²)',f(Qop/A)+' m/s'],['pump shutoff head',f(Hs)+' m']]);
+  else show('px_out',[['result','pump cannot overcome static head — no delivery'],['static head',f(H0)+' m'],['shutoff head',f(Hs)+' m']]);
+}
+
+/* manometer */
+let mmAnim=0,mmT=0,mmRunning=false;
+const mmDh=()=>num('mm_dh',24);
+function drawManometer(dh){
+  const c=$('manometerCanvas'),x=prep('manometerCanvas'),W=c._lw,H=c._lh;
+  x.clearRect(0,0,W,H);x.fillStyle='#fff';x.fillRect(0,0,W,H);
+  const xL=W*.32,xR=W*.68,top=H*.18,bot=H*.77,cw=14,s=H*.005,ym=bot-H*.19;
+  x.fillStyle='#57534e';x.font='11px -apple-system,Segoe UI,Arial,sans-serif';x.textAlign='center';
+  x.fillText('high-pressure side p₁',xL,top-H*.1);x.fillText('low-pressure side p₂',xR,top-H*.1);
+  x.strokeStyle='#57534e';x.lineWidth=2;arrow(x,xL-W*.1,top-H*.033,xL-18,top-H*.033);
+  x.textAlign='left';x.fillText('p₁',xL-W*.095,top-H*.055);
+  x.lineJoin='round';x.strokeStyle='#a8a29e';x.lineWidth=cw*2+6;
+  x.beginPath();x.moveTo(xL,top);x.lineTo(xL,bot);x.lineTo(xR,bot);x.lineTo(xR,top);x.stroke();
+  x.strokeStyle='#fff';x.lineWidth=cw*2;
+  x.beginPath();x.moveTo(xL,top);x.lineTo(xL,bot);x.lineTo(xR,bot);x.lineTo(xR,top);x.stroke();
+  const dhpx=dh*s,yL=ym+dhpx/2,yR=ym-dhpx/2;
+  x.save();x.beginPath();
+  x.rect(xL-cw,top,cw*2,bot-top+cw);x.rect(xR-cw,top,cw*2,bot-top+cw);x.rect(xL-cw,bot-cw,(xR-xL)+cw*2,cw*2);
+  x.clip();
+  x.fillStyle='rgba(186,230,253,.55)';
+  x.fillRect(xL-cw,top,cw*2,Math.max(0,yL-top));x.fillRect(xR-cw,top,cw*2,Math.max(0,yR-top));
+  x.fillStyle='#0891b2';
+  x.fillRect(xL-cw,yL,cw*2,(bot+cw)-yL);x.fillRect(xR-cw,yR,cw*2,(bot+cw)-yR);x.fillRect(xL-cw,bot-cw,(xR-xL)+cw*2,cw*2);
+  x.restore();
+  x.strokeStyle='#155e75';x.lineWidth=2;
+  x.beginPath();x.moveTo(xL-cw,yL);x.lineTo(xL+cw,yL);x.moveTo(xR-cw,yR);x.lineTo(xR+cw,yR);x.stroke();
+  const xm=(xL+xR)/2+W*.03;
+  x.strokeStyle='#dc2626';x.lineWidth=1.4;x.setLineDash([4,3]);
+  x.beginPath();x.moveTo(xL+cw+6,yL);x.lineTo(xm+14,yL);x.moveTo(xR-cw-6,yR);x.lineTo(xm+14,yR);x.stroke();
+  x.setLineDash([]);
+  if(yL-yR>14){arrow(x,xm,yL-2,xm,yR+2);arrow(x,xm,yR+2,xm,yL-2)}
+  x.fillStyle='#dc2626';x.textAlign='left';x.fillText('Δh = '+tn(dh)+' cm',xm+12,(yR+yL)/2+4);
+  const rhoH=num('mm_heavy',13600),rhoL=num('mm_light',1000),dp=(rhoH-rhoL)*G*dh/100;
+  x.fillStyle='#1c1917';x.font='12px -apple-system,Segoe UI,Arial,sans-serif';x.textAlign='left';
+  x.fillText('Δp = (ρ₂ − ρ₁)·g·Δh = '+tn(dp/1000)+' kPa',W*.08,H-14);
+  show('mm_out',[['column difference Δh',f(dh)+' cm'],['pressure difference Δp',f(dp)+' Pa'],['pressure difference Δp',f(dp/1000)+' kPa'],['equivalent water head',f(dp/(998*G))+' m']]);
+}
+function animateManometer(){
+  if(mmRunning){mmStop();return}
+  mmRunning=true;$('mm_btn').textContent='Stop';mmT=0;
+  const step=()=>{mmT+=.045;
+    const target=mmDh(),amp=Math.min(Math.max(target,6),16);
+    const dh=Math.max(0,target+amp*Math.sin(mmT*3)*Math.exp(-mmT*.5));
+    drawManometer(dh);
+    if(mmT>8){mmStop();return}
+    if(mmRunning)mmAnim=requestAnimationFrame(step)};
+  step();
+}
+function mmStop(){mmRunning=false;cancelAnimationFrame(mmAnim);mmAnim=0;const b=$('mm_btn');if(b)b.textContent='Animate';drawManometer(mmDh())}
+
+/* 2-D potential flow sandbox */
+const SB={parts:[],raf:0,run:false};
+function sbDims(c){const w=c._lw,h=c._lh;return{w,h,cx:w*.42,cy:h/2,sc:h/4.4,R:1.1}}
+function sbField(px,py,dm){
+  const U=num('sb_u',1.2),gam=num('sb_g',0),cyl=$('sb_cyl').checked;
+  const x=(px-dm.cx)/dm.sc,y=(py-dm.cy)/dm.sc;let r2=x*x+y*y;
+  if(cyl&&r2<dm.R*dm.R*1.05)return null;
+  r2=Math.max(r2,1e-4);
+  let u=U,w=0;
+  if(cyl){const R2=dm.R*dm.R,inv=R2/(r2*r2);u+=-U*(x*x-y*y)*inv;w+=-U*2*x*y*inv}
+  if(gam!==0){const k=gam/(2*PI*r2);u+=-k*y;w+=k*x}
+  const sp=Math.hypot(u,w),cap=Math.max(U*6,3);
+  if(sp>cap){u*=cap/sp;w*=cap/sp}
+  return [u,w];
+}
+function sbSpawn(dm,any){return{x:any?Math.random()*dm.w:-Math.random()*.06*dm.w,y:6+Math.random()*(dm.h-12)}}
+function sbDrawCyl(x,dm){if(!$('sb_cyl').checked)return;x.beginPath();x.arc(dm.cx,dm.cy,dm.R*dm.sc,0,7);x.fillStyle='#111f38';x.fill();x.lineWidth=2;x.strokeStyle='rgba(125,211,252,.85)';x.stroke()}
+function sbReset(){
+  const c=$('sandboxCanvas'),x=prep('sandboxCanvas'),dm=sbDims(c);
+  x.fillStyle='#0a1322';x.fillRect(0,0,dm.w,dm.h);
+  SB.parts=[];for(let i=0;i<700;i++)SB.parts.push(sbSpawn(dm,true));
+  x.fillStyle='rgba(148,210,255,.85)';SB.parts.forEach(p=>x.fillRect(p.x,p.y,2,2));
+  sbDrawCyl(x,dm);sbInfo();
+}
+function sbStep(){
+  if(!SB.run){SB.raf=0;return}
+  const c=$('sandboxCanvas');if(!c._lw)prep('sandboxCanvas');
+  const dm=sbDims(c),x=c.getContext('2d');
+  x.fillStyle='rgba(10,19,34,.26)';x.fillRect(0,0,dm.w,dm.h);
+  const U=num('sb_u',1.2),dt=.0336;
+  x.lineWidth=1.5;
+  for(const p of SB.parts){
+    const vel=sbField(p.x,p.y,dm);
+    if(!vel){Object.assign(p,sbSpawn(dm,false));continue}
+    const nx=p.x+vel[0]*dm.sc*dt,ny=p.y-vel[1]*dm.sc*dt;
+    const sp=Math.hypot(vel[0],vel[1]),t=Math.min(1,sp/(U*2.2));
+    x.strokeStyle='hsl('+Math.round(210-165*t)+',90%,'+Math.round(55+10*t)+'%)';
+    x.beginPath();x.moveTo(p.x,p.y);x.lineTo(nx,ny);x.stroke();
+    p.x=nx;p.y=ny;
+    if(p.x>dm.w+6||p.x<-.08*dm.w||p.y<-6||p.y>dm.h+6)Object.assign(p,sbSpawn(dm,false));
+  }
+  sbDrawCyl(x,dm);
+  SB.raf=requestAnimationFrame(sbStep);
+}
+function sbStart(){if(SB.raf)return;SB.run=true;$('sb_pause').textContent='Pause';SB.raf=requestAnimationFrame(sbStep)}
+function sbStop(){SB.run=false;if(SB.raf){cancelAnimationFrame(SB.raf);SB.raf=0}}
+function sbToggle(){if(SB.run){SB.run=false;cancelAnimationFrame(SB.raf);SB.raf=0;$('sb_pause').textContent='Resume'}else sbStart()}
+function sbInfo(){
+  const U=num('sb_u',1.2),gam=num('sb_g',0);
+  const vmax=2*U+Math.abs(gam)/(2*PI*1.1);
+  show('sb_out',[['freestream U',f(U)+' m/s'],['circulation Γ',f(gam)],['surface speed max ≈',f(vmax)+' m/s'],['tracer particles','700']]);
+}
+
+function drawAll(){drawProfile();drawBernoulliBars();drawMoody();drawManningTrend();drawHydroTrend();drawPumpSystem();drawManometer(mmDh());sbReset()}
+
+/* wire the visual lab controls */
+function bind(id,outId,fn){const el=$(id),o=$(outId);const up=()=>{if(o)o.textContent=el.value;fn()};el.addEventListener('input',up)}
+function bindSel(id,fn){$(id).addEventListener('change',fn)}
+bind('vp_V','vp_V_o',drawProfile);bindSel('vp_mode',drawProfile);
+bind('bb_p','bb_p_o',drawBernoulliBars);bind('bb_v','bb_v_o',drawBernoulliBars);bind('bb_z','bb_z_o',drawBernoulliBars);
+bind('mt_b','mt_b_o',drawManningTrend);bind('mt_n','mt_n_o',drawManningTrend);bind('mt_s','mt_s_o',drawManningTrend);
+bindSel('ht_fluid',drawHydroTrend);
+bind('px_h0','px_h0_o',drawPumpSystem);bind('px_k','px_k_o',drawPumpSystem);bind('px_hs','px_hs_o',drawPumpSystem);bind('px_qm','px_qm_o',drawPumpSystem);
+bind('mm_dh','mm_dh_o',()=>{if(!mmRunning)drawManometer(mmDh())});
+bindSel('mm_heavy',()=>{if(!mmRunning)drawManometer(mmDh())});
+bindSel('mm_light',()=>{if(!mmRunning)drawManometer(mmDh())});
+$('mm_btn').onclick=animateManometer;
+bind('sb_u','sb_u_o',sbInfo);bind('sb_g','sb_g_o',sbInfo);
+bindSel('sb_cyl',()=>{sbInfo();if(!SB.run)sbReset()});
+$('sb_pause').onclick=sbToggle;$('sb_reset').onclick=sbReset;
+
+let rzT=0;window.addEventListener('resize',()=>{clearTimeout(rzT);rzT=setTimeout(()=>{if($('page-visuals').classList.contains('active'))drawAll()},160)});
+
+/* state */
+function exportState(){const inputs=Object.fromEntries([...document.querySelectorAll('input[id],select[id]')].filter(e=>e.id!=='search').map(e=>[e.id,e.type==='checkbox'?e.checked:e.value]));const blob=new Blob([JSON.stringify({tool:'Aznur Fluid Mechanics',version:3,inputs},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='aznur-fluid-mechanics-state.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function importState(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.inputs)throw 0;for(const [id,value] of Object.entries(s.inputs)){const el=$(id);if(!el)continue;if(el.type==='checkbox')el.checked=!!value;else el.value=value}drawAll()}catch(_){alert('Invalid state file')}};r.readAsText(file)}
+
+drawAll();
+</script>
+</body>
+</html>
